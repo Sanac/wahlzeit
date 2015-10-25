@@ -123,6 +123,12 @@ public class Photo extends DataObject {
 	protected String ending = "jpg";
 	
 	/**
+	 * Location of Photo
+	 * default is null (no location given)
+	 */
+	public Coordinate location = null;
+	
+	/**
 	 *
 	 */
 	//TODO: change it to a single long
