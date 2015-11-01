@@ -1,102 +1,165 @@
 package org.wahlzeit.model;
 
-import org.wahlzeit.services.DataObject;
+/**
+ * Coordinate class
+ * 
+ * Saves latitude and longitude coordinates 
+ */
+public class Coordinate{
 
-public class Coordinate extends DataObject{
-	
 	/**
 	 * Constants for min/max and mid points latitude/longitude values
 	 */
-	public static final double ZEROVALUE = 0.0;
-	public static final double MIDLATITUDE = 90.0;
-	public static final double MAXLATITUDE = 180.0;
-	public static final double MIDLONGITUDE = 180.0;
-	public static final double MAXLONGITUDE = 359.0;
-	public static final double CIRCLEVALUE = 360.0;
 	
+	public static final double EARTH_RADIUS_KM = 6371.0;
+	public static final double ZERO_VALUE = 0.0;
+	public static final double CIRCLE_VALUE = 360.0;
+	public static final double HALF_CIRCLE_VALUE = CIRCLE_VALUE / 2;
+	public static final double QUARTER_CIRCLE_VALUE = CIRCLE_VALUE / 4;
+
+	public static final double MIN_LATITUDE = -90.0;
+	public static final double MAX_LATITUDE = 90.0;
+	public static final double MIN_LONGITUDE = -180.0;
+	public static final double MAX_LONGITUDE = 180.0;
+
 	/**
-	 * Latitude in degrees
-	 * Valid range of values: 0 (south pole) to 180 (north pole)
+	 * Latitude in degrees Valid range of values: -90 (south pole) to 90 (north
+	 * pole)
 	 */
 	private double latitude;
-	
-	
+
 	/**
-	 * Longitude in degrees
-	 * Valid range of values: 0 to 359
+	 * Longitude in degrees Valid range of values: -180 to 180
+	 * 
 	 * 0: prime meridian
-	 * Direction is eastward (i.e. longitude:=20 is 20 degrees east from the prime meridian)
 	 */
 	private double longitude;
+
 	/**
-	 * Constructor of Coordiante
-	 * Only accepts valid values for latitude and longitude
+	 * Constructor of Coordiante Only accepts valid values for latitude and
+	 * longitude
 	 * 
-	 * @param latitude (valid range: [0,180])
-	 * @param longitude (valid range: [0,359])
+	 * @param latitude
+	 *            (valid range: [-90,90])
+	 * @param longitude
+	 *            (valid range: [-180,180])
 	 */
 	public Coordinate(double latitude, double longitude) {
-		if (latitude > MAXLATITUDE || latitude < ZEROVALUE) {
-			throw new IllegalArgumentException("Latitude value is not valid. Range:[0,180]");
-		}
-		if (longitude > MAXLONGITUDE || longitude < ZEROVALUE) {
-			throw new IllegalArgumentException("Longitude value is not valid. Range:[0,360]");	
-		}
+		assertValidLatitude(latitude);
+		assertValidLongitude(longitude);
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
-	
+
 	/**
 	 * Calculate distance between two Coordinates
-	 * Distance is distance in degrees
+	 * 
+	 * @methodtype get
+	 * @methodproperties composed instance
 	 * 
 	 * @param c
-	 * @return Coordinate-object with latitudinal and longitudinal distances
+	 * @return Distance in km
 	 */
-	public Coordinate getDistance(Coordinate c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given parameter is null!");
-		}
-		return new Coordinate(getLatitudinalDistance(c), getLongitudinalDistance(c));
+	public double getDistance(Coordinate c) {
+		assertIsArgumentNotNull(c);
+		double radiansLatitude1 = Math.toRadians(this.latitude);
+		double radiansLatitude2 = Math.toRadians(c.latitude);
+		double deltaLongitude = Math.toRadians(getLongitudinalDistance(c));
+
+		double deltaSigma = Math.acos(Math.sin(radiansLatitude1)
+				* Math.sin(radiansLatitude2) + Math.cos(radiansLatitude1)
+				* Math.cos(radiansLatitude2) * Math.cos(deltaLongitude));
+		
+		return EARTH_RADIUS_KM * deltaSigma;
 	}
 
 	/**
-	 * Calculates longitudinal distance to other Coordinate 
-	 * Range of distances: [0,180]
+	 * Calculates longitudinal distance to other Coordinate Range of distances:
+	 * [0,180]
+	 * 
+	 * @methodtype get
+	 * @methodtype composed instance
 	 * 
 	 * @param c
 	 * @return distance in degrees
 	 */
 	public double getLongitudinalDistance(Coordinate c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given parameter is null!");
-		}
+		assertIsArgumentNotNull(c);
 
 		// if distance is larger then 180 return the shorter distance
 		double distance = Math.abs(this.longitude - c.longitude);
-		if(distance > MIDLONGITUDE) {
-			distance = CIRCLEVALUE - distance;
+		if (distance > HALF_CIRCLE_VALUE) {
+			distance = CIRCLE_VALUE - distance;
 		}
-		
+
 		return distance;
 	}
 
 	/**
-	 * Calculates latitudinal distance to other Coordinate 
-	 * Range of distances: [0,180]
+	 * Calculates latitudinal distance to other Coordinate Range of distances:
+	 * [0,180]
+	 * 
+	 * @methodtype get
+	 * @methodproperties composed instance
 	 * 
 	 * @param c
 	 * @return distance in degrees
 	 */
 	public double getLatitudinalDistance(Coordinate c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given parameter is null!");
-		}
+		assertIsArgumentNotNull(c);
 		return Math.abs(this.latitude - c.latitude);
 	}
 
 	/**
+	 * Assert if Argument is null
+	 *
+	 * @methodtype assertion
+	 * @methodproperties primitive class
+	 * 
+	 * @param c
+	 */
+	private static void assertIsArgumentNotNull(Object c) {
+		if (c == null) {
+			throw new IllegalArgumentException("Given Argument is null!");
+		}
+	}
+
+	/**
+	 * Assert if Latitude is valid
+	 * 
+	 * @methodtype assertion
+	 * @methodproperties primitive class
+	 * 
+	 * @param lat
+	 */
+	private static void assertValidLatitude(double lat) {
+		if (lat > MAX_LATITUDE || lat < MIN_LATITUDE) {
+			throw new IllegalArgumentException(
+					"Latitude value is not valid. Range:[-90,90]");
+		}
+	}
+
+	/**
+	 * Assert if Longitude is valid
+	 * 
+	 * @methodtype assertion
+	 * @methodproperties primitive class
+	 * 
+	 * @param lon
+	 */
+	private static void assertValidLongitude(double lon) {
+		if (lon > MAX_LONGITUDE || lon < MIN_LONGITUDE) {
+			throw new IllegalArgumentException(
+					"Longitude value is not valid. Range:[-180,180]");
+		}
+	}
+
+	/**
 	 * hashCode-method generated by eclipse
+	 * 
+	 * @methodtype conversion
+	 * @methodproperties primitive instance
+	 * 
 	 */
 	@Override
 	public int hashCode() {
@@ -109,9 +172,13 @@ public class Coordinate extends DataObject{
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-	
+
 	/**
 	 * equals-method generated by eclipse
+	 * 
+	 * @methodtype comparison
+	 * @methodproperties primitive instance
+	 * 
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -136,5 +203,4 @@ public class Coordinate extends DataObject{
 		return true;
 	}
 
-	
 }

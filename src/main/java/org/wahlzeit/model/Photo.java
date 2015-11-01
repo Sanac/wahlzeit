@@ -30,9 +30,11 @@ import com.googlecode.objectify.annotation.Parent;
 import org.wahlzeit.services.DataObject;
 import org.wahlzeit.services.EmailAddress;
 import org.wahlzeit.services.Language;
+import org.wahlzeit.services.LogBuilder;
 import org.wahlzeit.services.ObjectManager;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * A photo represents a user-provided (uploaded) photo.
@@ -123,10 +125,10 @@ public class Photo extends DataObject {
 	protected String ending = "jpg";
 	
 	/**
-	 * Location of Photo
+	 * Location of where photo was taken
 	 * default is null (no location given)
 	 */
-	public Coordinate location = null;
+	public Location location = null;
 	
 	/**
 	 *
@@ -137,12 +139,15 @@ public class Photo extends DataObject {
 	@Parent
 	Key parent = ObjectManager.applicationRootKey;
 
+	private static final Logger log = Logger.getLogger(Photo.class.getName());
+	
 	/**
 	 *
 	 */
 	public Photo() {
 		id = PhotoId.getNextId();
 		incWriteCount();
+		log.config(LogBuilder.createSystemMessage().addMessage("empty Photo created").toString());
 	}
 
 	/**
@@ -152,6 +157,7 @@ public class Photo extends DataObject {
 		id = myId;
 
 		incWriteCount();
+		log.config(LogBuilder.createSystemMessage().addMessage("Photo with id " + myId + " created").toString());
 	}
 
 	/**

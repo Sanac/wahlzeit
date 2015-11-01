@@ -37,7 +37,7 @@ public class PersistPhotoAgent extends HttpServlet {
 				log.config(LogBuilder.createSystemMessage().addMessage("Photo saved.").toString());
 			} else {
 				response.setStatus(299);
-				throw new IllegalArgumentException("Could not find Photo with ID " + id);
+				throw new IllegalArgumentException("Could not find Photo with ID " + id + " " + PhotoManager.getInstance().getIds());
 			}
 		}
 		response.setStatus(200);

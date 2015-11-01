@@ -72,7 +72,7 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 *
 	 */
-	public static final PhotoManager getInstance() {
+	public static PhotoManager getInstance() {
 		return instance;
 	}
 
@@ -94,7 +94,7 @@ public class PhotoManager extends ObjectManager {
 	 *
 	 */
 	public final Photo getPhoto(PhotoId id) {
-		return instance.getPhotoFromId(id);
+		return getInstance().getPhotoFromId(id);
 	}
 
 	/**
@@ -339,6 +339,7 @@ public class PhotoManager extends ObjectManager {
 	public Photo createPhoto(String filename, Image uploadedImage) throws Exception {
 		PhotoId id = PhotoId.getNextId();
 		Photo result = PhotoUtil.createPhoto(filename, id, uploadedImage);
+		System.out.println("NewID: " + id.toString());
 		addPhoto(result);
 		return result;
 	}
@@ -363,4 +364,11 @@ public class PhotoManager extends ObjectManager {
 		}
 	}
 
+	public String getIds() {
+		String s = "";
+		for (PhotoId i : photoCache.keySet()) {
+			s += i.asString() + " ";
+		}
+		return s;
+	}
 }

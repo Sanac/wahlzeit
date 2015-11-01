@@ -9,113 +9,123 @@ import org.junit.Test;
  * All test cases of the class {@link Coordinate}.
  */
 public class CoordinateTest {
-	
-	// (0,0)
+
+	// (-90,-180)
 	private Coordinate minCoordinate;
 
-	// (90, 180)
+	// (0, 0)
 	private Coordinate midCoordinate;
 
-	// (180, 359)
+	// (89, 179)
 	private Coordinate maxCoordinate;
-	
+
+	private final static double EPSILON = 100.0;
+
 	@Before
 	public void initCoordinate() {
-		minCoordinate = new Coordinate(Coordinate.ZEROVALUE, Coordinate.ZEROVALUE);
-		midCoordinate = new Coordinate(Coordinate.MIDLATITUDE, Coordinate.MIDLONGITUDE);
-		maxCoordinate = new Coordinate(Coordinate.MAXLATITUDE, Coordinate.MAXLONGITUDE);
+		minCoordinate = new Coordinate(Coordinate.MIN_LATITUDE,
+				Coordinate.MIN_LONGITUDE);
+		midCoordinate = new Coordinate(Coordinate.ZERO_VALUE,
+				Coordinate.ZERO_VALUE);
+		maxCoordinate = new Coordinate(Coordinate.MAX_LATITUDE - 1.0,
+				Coordinate.MAX_LONGITUDE - 1.0);
 	}
-	
+
 	@Test
 	public void testConstructor() {
 		assertNotNull(minCoordinate);
 		assertNotNull(midCoordinate);
 		assertNotNull(maxCoordinate);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void negativeLatitudeShouldThrowException(){
-		new Coordinate(Coordinate.ZEROVALUE-1,Coordinate.ZEROVALUE);
+	public void tooSmallLatitudeShouldThrowException() {
+		new Coordinate(Coordinate.MIN_LATITUDE - 1, Coordinate.ZERO_VALUE);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void negativeLongitudeShouldThrowException(){
-		new Coordinate(Coordinate.ZEROVALUE,Coordinate.ZEROVALUE-1);
+	public void tooSmallLongitudeShouldThrowException() {
+		new Coordinate(Coordinate.ZERO_VALUE, Coordinate.MIN_LONGITUDE - 1);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void largeLatitudeShouldThrowException(){
-		new Coordinate(Coordinate.MAXLATITUDE+1,Coordinate.ZEROVALUE);
+	public void tooLargeLatitudeShouldThrowException() {
+		new Coordinate(Coordinate.MAX_LATITUDE + 1, Coordinate.ZERO_VALUE);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void largeLongitudeShouldThrowException(){
-		new Coordinate(Coordinate.ZEROVALUE,Coordinate.MAXLONGITUDE+1);
+	public void largeLongitudeShouldThrowException() {
+		new Coordinate(Coordinate.ZERO_VALUE, Coordinate.MAX_LONGITUDE + 1);
 	}
-	
+
 	@Test
-	public void testGetLongitudinalDistance(){
+	public void testGetLongitudinalDistance() {
 		// distance to same coordinate should be 0
-		assertTrue(minCoordinate.getLongitudinalDistance(minCoordinate) == Coordinate.ZEROVALUE);
-		assertTrue(midCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.ZEROVALUE);
-		assertTrue(maxCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZEROVALUE);
-		
+		assertTrue(minCoordinate.getLongitudinalDistance(minCoordinate) == Coordinate.ZERO_VALUE);
+		assertTrue(midCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.ZERO_VALUE);
+		assertTrue(maxCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE);
+
 		// distance larger then 180 should map to distance less then 180
-		assertTrue(minCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZEROVALUE+1);
-		
+		assertTrue(minCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE + 1);
+
 		// commutative property
-		assertTrue(maxCoordinate.getLongitudinalDistance(minCoordinate) == minCoordinate.getLongitudinalDistance(maxCoordinate));
-		
+		assertTrue(maxCoordinate.getLongitudinalDistance(minCoordinate) == minCoordinate
+				.getLongitudinalDistance(maxCoordinate));
+
 		// mid distance
-		assertTrue(minCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.MIDLONGITUDE);
-		assertTrue(midCoordinate.getLongitudinalDistance(minCoordinate) == Coordinate.MIDLONGITUDE);
+		assertTrue(minCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.HALF_CIRCLE_VALUE);
+		assertTrue(midCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.HALF_CIRCLE_VALUE - 1);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void nullLongitudeShouldThrowException(){
+	public void nullLongitudeShouldThrowException() {
 		midCoordinate.getLongitudinalDistance(null);
 	}
-	
-	
+
 	@Test
-	public void testGetLatitudinalDistance(){
+	public void testGetLatitudinalDistance() {
 		// distance to same coordinate should be 0
-		assertTrue(minCoordinate.getLatitudinalDistance(minCoordinate) == Coordinate.ZEROVALUE);
-		assertTrue(midCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.ZEROVALUE);
-		assertTrue(maxCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.ZEROVALUE);
-		
+		assertTrue(minCoordinate.getLatitudinalDistance(minCoordinate) == Coordinate.ZERO_VALUE);
+		assertTrue(midCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.ZERO_VALUE);
+		assertTrue(maxCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE);
+
 		// max distance and commutative property
-		assertTrue(minCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.MAXLATITUDE);
-		assertTrue(maxCoordinate.getLatitudinalDistance(minCoordinate) == minCoordinate.getLatitudinalDistance(maxCoordinate));
-		
+		assertTrue(minCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.HALF_CIRCLE_VALUE - 1);
+		assertTrue(maxCoordinate.getLatitudinalDistance(minCoordinate) == minCoordinate
+				.getLatitudinalDistance(maxCoordinate));
+
 		// mid distance
-		assertTrue(minCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.MIDLATITUDE);
-		assertTrue(midCoordinate.getLatitudinalDistance(minCoordinate) == Coordinate.MIDLATITUDE);
+		assertTrue(minCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.QUARTER_CIRCLE_VALUE);
+		assertTrue(midCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.QUARTER_CIRCLE_VALUE - 1);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void nullLatitudeShouldThrowException(){
+	public void nullLatitudeShouldThrowException() {
 		midCoordinate.getLatitudinalDistance(null);
 	}
-	
+
 	@Test
-	public void testGetDistance(){
+	public void testGetDistance() {
 		// distance to same coordinate should be 0
-		assertEquals(minCoordinate.getDistance(minCoordinate), minCoordinate);
-		assertEquals(midCoordinate.getDistance(midCoordinate), minCoordinate);
-		assertEquals(maxCoordinate.getDistance(maxCoordinate), minCoordinate);
-		
+		assertEquals(minCoordinate.getDistance(minCoordinate),
+				Coordinate.ZERO_VALUE, EPSILON);
+		assertEquals(midCoordinate.getDistance(midCoordinate),
+				Coordinate.ZERO_VALUE, EPSILON);
+		assertEquals(maxCoordinate.getDistance(maxCoordinate),
+				Coordinate.ZERO_VALUE, EPSILON);
+
 		// max distance and commutative property
-		assertEquals(minCoordinate.getDistance(maxCoordinate), new Coordinate(Coordinate.MAXLATITUDE, Coordinate.ZEROVALUE+1));
-		assertEquals(maxCoordinate.getDistance(minCoordinate), minCoordinate.getDistance(maxCoordinate));
-		
+		assertEquals(minCoordinate.getDistance(maxCoordinate), 20000.0, EPSILON);
+		assertEquals(maxCoordinate.getDistance(minCoordinate),
+				minCoordinate.getDistance(maxCoordinate), EPSILON);
+
 		// mid distance
-		assertEquals(minCoordinate.getDistance(midCoordinate), midCoordinate);
-		assertEquals(midCoordinate.getDistance(minCoordinate), midCoordinate);
+		assertEquals(minCoordinate.getDistance(midCoordinate), 10000.0, EPSILON);
+		assertEquals(midCoordinate.getDistance(maxCoordinate), 10100.0, EPSILON);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
-	public void nullDistanceShouldThrowException(){
+	public void nullDistanceShouldThrowException() {
 		midCoordinate.getDistance(null);
 	}
 }
