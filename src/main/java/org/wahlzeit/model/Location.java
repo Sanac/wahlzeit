@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import com.googlecode.objectify.annotation.Container;
+
 /**
  * Location class
  * 
@@ -7,6 +9,7 @@ package org.wahlzeit.model;
  */
 public class Location {
 	private String name;
+	@Container
 	private Coordinate coordinate;
 	
 	public Location(String name, Coordinate coordinate) {

@@ -7,6 +7,7 @@ import org.wahlzeit.model.Administrator;
 import org.wahlzeit.model.Client;
 import org.wahlzeit.model.Globals;
 import org.wahlzeit.model.Guest;
+import org.wahlzeit.model.LeafPhoto;
 import org.wahlzeit.model.Moderator;
 import org.wahlzeit.model.Photo;
 import org.wahlzeit.model.PhotoCase;
@@ -35,6 +36,7 @@ public class OfyService {
 		factory().register(Guest.class);
 		factory().register(PhotoCase.class);
 		factory().register(ImageWrapper.class);
+		factory().register(LeafPhoto.class);
 	}
 
 	public static Objectify ofy() {

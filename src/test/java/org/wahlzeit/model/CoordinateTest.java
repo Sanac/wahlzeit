@@ -1,6 +1,10 @@
 package org.wahlzeit.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,122 +14,105 @@ import org.junit.Test;
  */
 public class CoordinateTest {
 
-	// (-90,-180)
-	private Coordinate minCoordinate;
+	// (-90,-180, 1)
+	private Coordinate minCoordinateSpheric;
+	private Coordinate minCoordinateCartesian;
 
-	// (0, 0)
-	private Coordinate midCoordinate;
+	// (0, 0, 180)
+	private Coordinate midCoordinateSpheric;
+	private Coordinate midCoordinateCartesian;
 
-	// (89, 179)
-	private Coordinate maxCoordinate;
+	// (89, 179, 360)
+	private Coordinate maxCoordinateSpheric;
+	private Coordinate maxCoordinateCartesian;
 
 	private final static double EPSILON = 100.0;
 
 	@Before
 	public void initCoordinate() {
-		minCoordinate = new Coordinate(Coordinate.MIN_LATITUDE,
-				Coordinate.MIN_LONGITUDE);
-		midCoordinate = new Coordinate(Coordinate.ZERO_VALUE,
-				Coordinate.ZERO_VALUE);
-		maxCoordinate = new Coordinate(Coordinate.MAX_LATITUDE - 1.0,
-				Coordinate.MAX_LONGITUDE - 1.0);
+		minCoordinateSpheric = new SphericCoordinate(
+				SphericCoordinate.MIN_LATITUDE,
+				SphericCoordinate.MIN_LONGITUDE,
+				SphericCoordinate.ZERO_VALUE + 1);
+		midCoordinateSpheric = new SphericCoordinate(
+				SphericCoordinate.ZERO_VALUE, SphericCoordinate.ZERO_VALUE,
+				SphericCoordinate.HALF_CIRCLE_VALUE);
+		maxCoordinateSpheric = new SphericCoordinate(
+				SphericCoordinate.MAX_LATITUDE - 1.0,
+				SphericCoordinate.MAX_LONGITUDE - 1.0,
+				SphericCoordinate.CIRCLE_VALUE);
+		minCoordinateCartesian = CartesianCoordinate
+				.asCartesianCoordinate(minCoordinateSpheric);
+		midCoordinateCartesian = CartesianCoordinate
+				.asCartesianCoordinate(midCoordinateSpheric);
+		maxCoordinateCartesian = CartesianCoordinate
+				.asCartesianCoordinate(maxCoordinateSpheric);
 	}
 
 	@Test
-	public void testConstructor() {
-		assertNotNull(minCoordinate);
-		assertNotNull(midCoordinate);
-		assertNotNull(maxCoordinate);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void tooSmallLatitudeShouldThrowException() {
-		new Coordinate(Coordinate.MIN_LATITUDE - 1, Coordinate.ZERO_VALUE);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void tooSmallLongitudeShouldThrowException() {
-		new Coordinate(Coordinate.ZERO_VALUE, Coordinate.MIN_LONGITUDE - 1);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void tooLargeLatitudeShouldThrowException() {
-		new Coordinate(Coordinate.MAX_LATITUDE + 1, Coordinate.ZERO_VALUE);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void largeLongitudeShouldThrowException() {
-		new Coordinate(Coordinate.ZERO_VALUE, Coordinate.MAX_LONGITUDE + 1);
+	public void testAsSphericRepresentation() {
+		assertTrue(Arrays.equals(
+				minCoordinateSpheric.asSphericRepresentation(),
+				minCoordinateCartesian.asSphericRepresentation()));
+		assertTrue(Arrays.equals(
+				midCoordinateSpheric.asSphericRepresentation(),
+				midCoordinateCartesian.asSphericRepresentation()));
+		assertTrue(Arrays.equals(
+				maxCoordinateSpheric.asSphericRepresentation(),
+				maxCoordinateCartesian.asSphericRepresentation()));
 	}
 
 	@Test
-	public void testGetLongitudinalDistance() {
-		// distance to same coordinate should be 0
-		assertTrue(minCoordinate.getLongitudinalDistance(minCoordinate) == Coordinate.ZERO_VALUE);
-		assertTrue(midCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.ZERO_VALUE);
-		assertTrue(maxCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE);
-
-		// distance larger then 180 should map to distance less then 180
-		assertTrue(minCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE + 1);
-
-		// commutative property
-		assertTrue(maxCoordinate.getLongitudinalDistance(minCoordinate) == minCoordinate
-				.getLongitudinalDistance(maxCoordinate));
-
-		// mid distance
-		assertTrue(minCoordinate.getLongitudinalDistance(midCoordinate) == Coordinate.HALF_CIRCLE_VALUE);
-		assertTrue(midCoordinate.getLongitudinalDistance(maxCoordinate) == Coordinate.HALF_CIRCLE_VALUE - 1);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void nullLongitudeShouldThrowException() {
-		midCoordinate.getLongitudinalDistance(null);
-	}
-
-	@Test
-	public void testGetLatitudinalDistance() {
-		// distance to same coordinate should be 0
-		assertTrue(minCoordinate.getLatitudinalDistance(minCoordinate) == Coordinate.ZERO_VALUE);
-		assertTrue(midCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.ZERO_VALUE);
-		assertTrue(maxCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.ZERO_VALUE);
-
-		// max distance and commutative property
-		assertTrue(minCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.HALF_CIRCLE_VALUE - 1);
-		assertTrue(maxCoordinate.getLatitudinalDistance(minCoordinate) == minCoordinate
-				.getLatitudinalDistance(maxCoordinate));
-
-		// mid distance
-		assertTrue(minCoordinate.getLatitudinalDistance(midCoordinate) == Coordinate.QUARTER_CIRCLE_VALUE);
-		assertTrue(midCoordinate.getLatitudinalDistance(maxCoordinate) == Coordinate.QUARTER_CIRCLE_VALUE - 1);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void nullLatitudeShouldThrowException() {
-		midCoordinate.getLatitudinalDistance(null);
+	public void testAsCartesianRepresentation() {
+		assertTrue(Arrays.equals(
+				minCoordinateSpheric.asCartesianRepresentation(),
+				minCoordinateCartesian.asCartesianRepresentation()));
+		assertTrue(Arrays.equals(
+				midCoordinateSpheric.asCartesianRepresentation(),
+				midCoordinateCartesian.asCartesianRepresentation()));
+		assertTrue(Arrays.equals(
+				maxCoordinateSpheric.asCartesianRepresentation(),
+				maxCoordinateCartesian.asCartesianRepresentation()));
 	}
 
 	@Test
 	public void testGetDistance() {
 		// distance to same coordinate should be 0
-		assertEquals(minCoordinate.getDistance(minCoordinate),
-				Coordinate.ZERO_VALUE, EPSILON);
-		assertEquals(midCoordinate.getDistance(midCoordinate),
-				Coordinate.ZERO_VALUE, EPSILON);
-		assertEquals(maxCoordinate.getDistance(maxCoordinate),
-				Coordinate.ZERO_VALUE, EPSILON);
+		assertEquals(minCoordinateSpheric.getDistance(minCoordinateSpheric),
+				SphericCoordinate.ZERO_VALUE, EPSILON);
+		assertEquals(midCoordinateSpheric.getDistance(midCoordinateSpheric),
+				SphericCoordinate.ZERO_VALUE, EPSILON);
+		assertEquals(maxCoordinateSpheric.getDistance(maxCoordinateSpheric),
+				SphericCoordinate.ZERO_VALUE, EPSILON);
 
 		// max distance and commutative property
-		assertEquals(minCoordinate.getDistance(maxCoordinate), 20000.0, EPSILON);
-		assertEquals(maxCoordinate.getDistance(minCoordinate),
-				minCoordinate.getDistance(maxCoordinate), EPSILON);
+		assertEquals(minCoordinateSpheric.getDistance(maxCoordinateSpheric),
+				20000.0, EPSILON);
+		assertEquals(maxCoordinateSpheric.getDistance(minCoordinateSpheric),
+				minCoordinateSpheric.getDistance(maxCoordinateSpheric), EPSILON);
 
 		// mid distance
-		assertEquals(minCoordinate.getDistance(midCoordinate), 10000.0, EPSILON);
-		assertEquals(midCoordinate.getDistance(maxCoordinate), 10100.0, EPSILON);
+		assertEquals(minCoordinateSpheric.getDistance(midCoordinateSpheric),
+				10000.0, EPSILON);
+		assertEquals(midCoordinateSpheric.getDistance(maxCoordinateSpheric),
+				10100.0, EPSILON);
+
+		// mixing spheric and cartesian
+		assertEquals(minCoordinateSpheric.getDistance(maxCoordinateCartesian),
+				20000.0, EPSILON);
+		assertEquals(maxCoordinateCartesian.getDistance(minCoordinateSpheric),
+				20000.0, EPSILON);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void nullDistanceShouldThrowException() {
-		midCoordinate.getDistance(null);
+	@Test
+	public void testIsEqual() {
+		assertTrue(minCoordinateCartesian.isEqual(minCoordinateSpheric));
+		assertTrue(minCoordinateSpheric.isEqual(minCoordinateCartesian));
+
+		assertTrue(midCoordinateCartesian.isEqual(midCoordinateSpheric));
+		assertTrue(midCoordinateSpheric.isEqual(midCoordinateCartesian));
+
+		assertTrue(maxCoordinateCartesian.isEqual(maxCoordinateSpheric));
+		assertTrue(maxCoordinateSpheric.isEqual(maxCoordinateCartesian));
 	}
 }

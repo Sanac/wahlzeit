@@ -10,11 +10,6 @@ import com.googlecode.objectify.annotation.Subclass;
 @Subclass(index=true)
 public class LeafPhoto extends Photo{
 	
-	// Register to ObjectifyService to persist Leafphoto
-	static {
-		ObjectifyService.register(LeafPhoto.class);
-	}
-	
 	/**
 	 * Leaf color (see Enum Leafcolor)
 	 */
