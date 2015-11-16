@@ -5,7 +5,7 @@ package org.wahlzeit.model;
  * 
  * Saves latitude, longitude and radius
  */
-public class SphericCoordinate implements Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
 
 	/**
 	 * Constants for min/max and mid points latitude/longitude values
@@ -97,30 +97,11 @@ public class SphericCoordinate implements Coordinate {
 	}
 
 	/**
-	 * See Coordinate interface for documentation
+	 * See AbstractCoordinate class for documentation
 	 */
 	@Override
-	public double getDistance(Coordinate c) {
-		assertIsArgumentNotNull(c);
-		SphericCoordinate otherSpheric = SphericCoordinate
-				.asSphericCoordinate(c);
-
-		double lat1 = Math.toRadians(this.latitude);
-		double lat2 = Math.toRadians(otherSpheric.latitude);
-		double deltaLong = Math
-				.toRadians(getLongitudinalDistance(otherSpheric));
-
-		double deltaSigma = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(deltaLong));
-		return EARTH_RADIUS_KM * deltaSigma;
-	}
-
-	/**
-	 * See Coordinate interface for documentation
-	 */
-	@Override
-	public boolean isEqual(Coordinate c) {
-		return equals(SphericCoordinate.asSphericCoordinate(c));
+	public Coordinate asOwnCoordinate(Coordinate c) {
+		return asSphericCoordinate(c);
 	}
 
 	/**
@@ -136,9 +117,10 @@ public class SphericCoordinate implements Coordinate {
 	 */
 	@Override
 	public double[] asCartesianRepresentation() {
-		//normalized to valid values: [0,180] 
-		double normalizedLat = latitude >= ZERO_VALUE ? latitude : HALF_CIRCLE_VALUE + latitude;
-		
+		// normalized to valid values: [0,180]
+		double normalizedLat = latitude >= ZERO_VALUE ? latitude
+				: HALF_CIRCLE_VALUE + latitude;
+
 		double x = radius * Math.sin(Math.toRadians(normalizedLat))
 				* Math.cos(Math.toRadians(longitude));
 		double y = radius * Math.sin(Math.toRadians(normalizedLat))
@@ -160,22 +142,6 @@ public class SphericCoordinate implements Coordinate {
 		double[] sphericRep = c.asSphericRepresentation();
 		return new SphericCoordinate(sphericRep[0], sphericRep[1],
 				sphericRep[2]);
-	}
-
-	/**
-	 * Assert if Argument is null
-	 * 
-	 * should be in absract Coordinate class
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param c
-	 */
-	private static void assertIsArgumentNotNull(Object c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given Argument is null!");
-		}
 	}
 
 	/**

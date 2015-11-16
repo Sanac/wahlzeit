@@ -5,7 +5,7 @@ package org.wahlzeit.model;
  * 
  * Saves latitude and longitude coordinates
  */
-public class CartesianCoordinate implements Coordinate {
+public class CartesianCoordinate extends AbstractCoordinate {
 
 	/**
 	 * x coordinate
@@ -81,44 +81,17 @@ public class CartesianCoordinate implements Coordinate {
 	 * See Coordinate interface for documentation
 	 */
 	@Override
-	public double getDistance(Coordinate c) {
-		assertIsArgumentNotNull(c);
-		double[] thisSphericRepresentaion = this.asSphericRepresentation();
-		double[] otherSphericRepresentation = c.asSphericRepresentation();
-
-		double lat1 = Math.toRadians(thisSphericRepresentaion[0]);
-		double lat2 = Math.toRadians(otherSphericRepresentation[0]);
-		double deltaLong = Math.toRadians(Math
-				.abs(thisSphericRepresentaion[0]
-						- otherSphericRepresentation[0]));
-
-		double deltaSigma = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-				+ Math.cos(lat1) * Math.cos(lat2) * Math.cos(deltaLong));
-		return EARTH_RADIUS_KM * deltaSigma;
-	}
-
-	/**
-	 * See Coordinate interface for documentation
-	 */
-	@Override
-	public boolean isEqual(Coordinate c) {
-		return equals(CartesianCoordinate.asCartesianCoordinate(c));
-	}
-
-	/**
-	 * See Coordinate interface for documentation
-	 */
-	@Override
 	public double[] asSphericRepresentation() {
 		double radius = Math.sqrt(x * x + y * y + z * z);
 		double latitude = Math.acos(z / radius);
 		double longitude = Math.atan2(y, x);
-		
+
 		// denomalized: latitude to valid values (-90,90]
 		double degreesLatitude = Math.toDegrees(latitude);
-		double denormalizedLat = degreesLatitude < QUARTER_CIRCLE_VALUE ? degreesLatitude : -HALF_CIRCLE_VALUE + degreesLatitude;
-		return new double[] { denormalizedLat,
-				Math.toDegrees(longitude), radius };
+		double denormalizedLat = degreesLatitude < QUARTER_CIRCLE_VALUE ? degreesLatitude
+				: -HALF_CIRCLE_VALUE + degreesLatitude;
+		return new double[] { denormalizedLat, Math.toDegrees(longitude),
+				radius };
 	}
 
 	/**
@@ -127,6 +100,14 @@ public class CartesianCoordinate implements Coordinate {
 	@Override
 	public double[] asCartesianRepresentation() {
 		return new double[] { x, y, z };
+	}
+
+	/**
+	 * See AbstractCoordinate class for documentation
+	 */
+	@Override
+	public Coordinate asOwnCoordinate(Coordinate c) {
+		return asCartesianCoordinate(c);
 	}
 
 	/**
@@ -142,22 +123,6 @@ public class CartesianCoordinate implements Coordinate {
 		assertIsArgumentNotNull(c);
 		double[] cRep = c.asCartesianRepresentation();
 		return new CartesianCoordinate(cRep[0], cRep[1], cRep[2]);
-	}
-
-	/**
-	 * Assert if Argument is null
-	 * 
-	 * should be in abstract Coordinate class
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param c
-	 */
-	private static void assertIsArgumentNotNull(Object c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given Argument is null!");
-		}
 	}
 
 	/**

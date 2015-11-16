@@ -27,6 +27,18 @@ public class CoordinateTest {
 	private Coordinate maxCoordinateCartesian;
 
 	private final static double EPSILON = 100.0;
+	
+	private Coordinate tokyoSpheric;
+	private Coordinate tokyoCartesian;
+	
+	private Coordinate berlinSpheric;
+	private Coordinate berlinCartesian;
+	
+	private Coordinate newYorkSpheric;
+	private Coordinate newYorkCartesian;
+	
+	private Coordinate sydneySpheric;
+	private Coordinate sydneyCartesian;
 
 	@Before
 	public void initCoordinate() {
@@ -47,6 +59,14 @@ public class CoordinateTest {
 				.asCartesianCoordinate(midCoordinateSpheric);
 		maxCoordinateCartesian = CartesianCoordinate
 				.asCartesianCoordinate(maxCoordinateSpheric);
+		tokyoSpheric = new SphericCoordinate(35.69, 139.69, Coordinate.EARTH_RADIUS_KM);
+		tokyoCartesian = CartesianCoordinate.asCartesianCoordinate(tokyoSpheric);
+		berlinSpheric = new SphericCoordinate(52.52, 13.40, Coordinate.EARTH_RADIUS_KM);
+		berlinCartesian = CartesianCoordinate.asCartesianCoordinate(berlinSpheric);
+		newYorkSpheric = new SphericCoordinate(40.71, -74.01, Coordinate.EARTH_RADIUS_KM);
+		newYorkCartesian = CartesianCoordinate.asCartesianCoordinate(newYorkSpheric);
+		sydneySpheric = new SphericCoordinate(-33.87, 151.21, Coordinate.EARTH_RADIUS_KM);
+		sydneyCartesian = CartesianCoordinate.asCartesianCoordinate(sydneySpheric);
 	}
 
 	@Test
@@ -102,6 +122,25 @@ public class CoordinateTest {
 				20000.0, EPSILON);
 		assertEquals(maxCoordinateCartesian.getDistance(minCoordinateSpheric),
 				20000.0, EPSILON);
+		
+		// distances of real cities
+		assertEquals(tokyoSpheric.getDistance(berlinCartesian), 8926.0, EPSILON);
+		assertEquals(berlinSpheric.getDistance(tokyoCartesian), 8926.0, EPSILON);
+		
+		assertEquals(berlinCartesian.getDistance(newYorkSpheric), 6392.0, EPSILON);
+		assertEquals(newYorkCartesian.getDistance(berlinSpheric), 6392.0, EPSILON);
+		
+		assertEquals(newYorkSpheric.getDistance(tokyoCartesian), 10861.0, EPSILON);
+		assertEquals(tokyoSpheric.getDistance(newYorkCartesian), 10861.0, EPSILON);
+		
+		assertEquals(tokyoCartesian.getDistance(sydneySpheric), 7835.0, EPSILON);
+		assertEquals(sydneyCartesian.getDistance(tokyoSpheric), 7835.0, EPSILON);
+		
+		assertEquals(berlinSpheric.getDistance(sydneyCartesian), 16112.0, EPSILON);
+		assertEquals(sydneySpheric.getDistance(berlinCartesian), 16112.0, EPSILON);
+		
+		assertEquals(newYorkCartesian.getDistance(sydneySpheric), 16007.0, EPSILON);
+		assertEquals(sydneyCartesian.getDistance(newYorkSpheric), 16007.0, EPSILON);
 	}
 
 	@Test
