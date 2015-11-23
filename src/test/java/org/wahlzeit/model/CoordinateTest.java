@@ -1,10 +1,7 @@
 package org.wahlzeit.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,40 +56,14 @@ public class CoordinateTest {
 				.asCartesianCoordinate(midCoordinateSpheric);
 		maxCoordinateCartesian = CartesianCoordinate
 				.asCartesianCoordinate(maxCoordinateSpheric);
-		tokyoSpheric = new SphericCoordinate(35.69, 139.69, Coordinate.EARTH_RADIUS_KM);
+		tokyoSpheric = new SphericCoordinate(35.69, 139.69, AbstractCoordinate.EARTH_RADIUS_KM);
 		tokyoCartesian = CartesianCoordinate.asCartesianCoordinate(tokyoSpheric);
-		berlinSpheric = new SphericCoordinate(52.52, 13.40, Coordinate.EARTH_RADIUS_KM);
+		berlinSpheric = new SphericCoordinate(52.52, 13.40, AbstractCoordinate.EARTH_RADIUS_KM);
 		berlinCartesian = CartesianCoordinate.asCartesianCoordinate(berlinSpheric);
-		newYorkSpheric = new SphericCoordinate(40.71, -74.01, Coordinate.EARTH_RADIUS_KM);
+		newYorkSpheric = new SphericCoordinate(40.71, -74.01, AbstractCoordinate.EARTH_RADIUS_KM);
 		newYorkCartesian = CartesianCoordinate.asCartesianCoordinate(newYorkSpheric);
-		sydneySpheric = new SphericCoordinate(-33.87, 151.21, Coordinate.EARTH_RADIUS_KM);
+		sydneySpheric = new SphericCoordinate(-33.87, 151.21, AbstractCoordinate.EARTH_RADIUS_KM);
 		sydneyCartesian = CartesianCoordinate.asCartesianCoordinate(sydneySpheric);
-	}
-
-	@Test
-	public void testAsSphericRepresentation() {
-		assertTrue(Arrays.equals(
-				minCoordinateSpheric.asSphericRepresentation(),
-				minCoordinateCartesian.asSphericRepresentation()));
-		assertTrue(Arrays.equals(
-				midCoordinateSpheric.asSphericRepresentation(),
-				midCoordinateCartesian.asSphericRepresentation()));
-		assertTrue(Arrays.equals(
-				maxCoordinateSpheric.asSphericRepresentation(),
-				maxCoordinateCartesian.asSphericRepresentation()));
-	}
-
-	@Test
-	public void testAsCartesianRepresentation() {
-		assertTrue(Arrays.equals(
-				minCoordinateSpheric.asCartesianRepresentation(),
-				minCoordinateCartesian.asCartesianRepresentation()));
-		assertTrue(Arrays.equals(
-				midCoordinateSpheric.asCartesianRepresentation(),
-				midCoordinateCartesian.asCartesianRepresentation()));
-		assertTrue(Arrays.equals(
-				maxCoordinateSpheric.asCartesianRepresentation(),
-				maxCoordinateCartesian.asCartesianRepresentation()));
 	}
 
 	@Test

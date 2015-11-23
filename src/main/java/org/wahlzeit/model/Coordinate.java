@@ -25,32 +25,29 @@ public interface Coordinate {
 	public boolean isEqual(Coordinate c);
 
 	/**
-	 * Transform Object into a double array
+	 * Returns latitude of Coordinate object
 	 * 
-	 * Can be used as a SphericCoordinate representation
-	 * 
-	 * returnArray[0] := latitude
-	 * 
-	 * returnArray[1] := longitude
-	 * 
-	 * returnArray[2] := radius
+	 * @methodtype get
 	 * 
 	 * @return
 	 */
-	public double[] asSphericRepresentation();
+	public double getLatitude();
 
 	/**
-	 * Transform Object into a double array
+	 * Returns longitude of Coordinate object
 	 * 
-	 * Can be used as a CartesianCoordinate representation
-	 * 
-	 * returnArray[0] := x
-	 * 
-	 * returnArray[1] := y
-	 * 
-	 * returnArray[2] := z
+	 * @methodtype get
 	 * 
 	 * @return
 	 */
-	public double[] asCartesianRepresentation();
+	public double getLongitude();
+
+	/**
+	 * Returns radius of Coordinate object
+	 * 
+	 * @methodtype get
+	 * 
+	 * @return
+	 */
+	public double getRadius();
 }

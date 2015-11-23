@@ -36,6 +36,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @param z
 	 */
 	public CartesianCoordinate(double x, double y, double z) {
+		assertIsNotNaN(x);
+		assertIsNotNaN(y);
+		assertIsNotNaN(z);
+		assertIsNotInfinite(x);
+		assertIsNotInfinite(y);
+		assertIsNotInfinite(z);
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -50,6 +56,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	public double getX() {
+		assertClassInvariants();
 		return x;
 	}
 
@@ -62,6 +69,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	public double getY() {
+		assertClassInvariants();
 		return y;
 	}
 
@@ -74,6 +82,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	public double getZ() {
+		assertClassInvariants();
 		return z;
 	}
 
@@ -81,33 +90,77 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * See Coordinate interface for documentation
 	 */
 	@Override
-	public double[] asSphericRepresentation() {
+	public double getLatitude() {
+		assertClassInvariants();
+
 		double radius = Math.sqrt(x * x + y * y + z * z);
 		double latitude = Math.acos(z / radius);
-		double longitude = Math.atan2(y, x);
 
 		// denomalized: latitude to valid values (-90,90]
 		double degreesLatitude = Math.toDegrees(latitude);
 		double denormalizedLat = degreesLatitude < QUARTER_CIRCLE_VALUE ? degreesLatitude
 				: -HALF_CIRCLE_VALUE + degreesLatitude;
-		return new double[] { denormalizedLat, Math.toDegrees(longitude),
-				radius };
+
+		// postcondition
+		assertIsValidLatitude(denormalizedLat);
+
+		assertClassInvariants();
+		return denormalizedLat;
 	}
 
 	/**
 	 * See Coordinate interface for documentation
 	 */
 	@Override
-	public double[] asCartesianRepresentation() {
-		return new double[] { x, y, z };
+	public double getLongitude() {
+		assertClassInvariants();
+		double longitude = Math.atan2(y, x);
+		longitude = Math.toDegrees(longitude);
+
+		// postcondition
+		assertIsValidLongitude(longitude);
+
+		assertClassInvariants();
+		return longitude;
+	}
+
+	/**
+	 * See Coordinate interface for documentation
+	 */
+	@Override
+	public double getRadius() {
+		assertClassInvariants();
+
+		double radius = Math.sqrt(x * x + y * y + z * z);
+
+		// postcondition
+		assertIsValidRadius(radius);
+
+		assertClassInvariants();
+		return radius;
 	}
 
 	/**
 	 * See AbstractCoordinate class for documentation
 	 */
 	@Override
-	public Coordinate asOwnCoordinate(Coordinate c) {
+	protected Coordinate asOwnCoordinate(Coordinate c) {
 		return asCartesianCoordinate(c);
+	}
+
+	/**
+	 * Assert if attributes are valid
+	 * 
+	 * @methodtype assertion
+	 */
+	@Override
+	protected void assertClassInvariants() {
+		assertIsNotNaN(x);
+		assertIsNotNaN(y);
+		assertIsNotNaN(z);
+		assertIsNotInfinite(x);
+		assertIsNotInfinite(y);
+		assertIsNotInfinite(z);
 	}
 
 	/**
@@ -120,9 +173,29 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	public static CartesianCoordinate asCartesianCoordinate(Coordinate c) {
+		// precondition
 		assertIsArgumentNotNull(c);
-		double[] cRep = c.asCartesianRepresentation();
-		return new CartesianCoordinate(cRep[0], cRep[1], cRep[2]);
+
+		double latitude = c.getLatitude();
+		double longitude = c.getLongitude();
+		double radius = c.getRadius();
+
+		// normalized to valid values: [0,180]
+		double normalizedLat = latitude >= ZERO_VALUE ? latitude
+				: HALF_CIRCLE_VALUE + latitude;
+
+		double x = radius * Math.sin(Math.toRadians(normalizedLat))
+				* Math.cos(Math.toRadians(longitude));
+		double y = radius * Math.sin(Math.toRadians(normalizedLat))
+				* Math.sin(Math.toRadians(longitude));
+		double z = radius * Math.cos(Math.toRadians(normalizedLat));
+
+		CartesianCoordinate result = new CartesianCoordinate(x, y, z);
+
+		// postcondition
+		result.assertClassInvariants();
+
+		return result;
 	}
 
 	/**
@@ -136,13 +209,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) x;
+		result = prime * result + (int) y;
+		result = prime * result + (int) z;
 		return result;
 	}
 
@@ -162,11 +231,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		if (getClass() != obj.getClass())
 			return false;
 		CartesianCoordinate other = (CartesianCoordinate) obj;
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+		double delta = 0.001;
+		if (Math.abs(x - other.x) > delta)
 			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+		if (Math.abs(y - other.y) > delta)
 			return false;
-		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+		if (Math.abs(z - other.z) > delta)
 			return false;
 		return true;
 	}

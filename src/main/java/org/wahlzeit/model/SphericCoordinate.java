@@ -8,14 +8,6 @@ package org.wahlzeit.model;
 public class SphericCoordinate extends AbstractCoordinate {
 
 	/**
-	 * Constants for min/max and mid points latitude/longitude values
-	 */
-	public static final double MIN_LATITUDE = -90.0;
-	public static final double MAX_LATITUDE = 90.0;
-	public static final double MIN_LONGITUDE = -180.0;
-	public static final double MAX_LONGITUDE = 180.0;
-
-	/**
 	 * Latitude in degrees
 	 * 
 	 * Valid range of values: -90 (south pole) to 90 (north pole)
@@ -51,12 +43,39 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 *            (valid range: >= 0)
 	 */
 	public SphericCoordinate(double latitude, double longitude, double radius) {
-		assertValidLatitude(latitude);
-		assertValidLongitude(longitude);
-		assertValidRadius(radius);
+		assertIsValidLatitude(latitude);
+		assertIsValidLongitude(longitude);
+		assertIsValidRadius(radius);
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.radius = radius;
+	}
+
+	/**
+	 * See Coordinate interface for documentation
+	 */
+	@Override
+	public double getLatitude() {
+		assertClassInvariants();
+		return latitude;
+	}
+
+	/**
+	 * See Coordinate interface for documentation
+	 */
+	@Override
+	public double getLongitude() {
+		assertClassInvariants();
+		return longitude;
+	}
+
+	/**
+	 * See Coordinate interface for documentation
+	 */
+	@Override
+	public double getRadius() {
+		assertClassInvariants();
+		return radius;
 	}
 
 	/**
@@ -70,6 +89,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return distance in degrees
 	 */
 	public double getLongitudinalDistance(SphericCoordinate c) {
+		assertClassInvariants();
+
+		// precondition
 		assertIsArgumentNotNull(c);
 
 		// if distance is larger then 180 return the shorter distance
@@ -78,6 +100,12 @@ public class SphericCoordinate extends AbstractCoordinate {
 			distance = CIRCLE_VALUE - distance;
 		}
 
+		// postcondition
+		assertIsNonNegativeValue(distance);
+		assertIsNotNaN(distance);
+		assertIsNotInfinite(distance);
+
+		assertClassInvariants();
 		return distance;
 	}
 
@@ -92,41 +120,35 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return distance in degrees
 	 */
 	public double getLatitudinalDistance(SphericCoordinate c) {
+		assertClassInvariants();
+
+		// precondition
 		assertIsArgumentNotNull(c);
-		return Math.abs(this.latitude - c.latitude);
+
+		double distance = Math.abs(this.latitude - c.latitude);
+
+		// postcondition
+		assertIsNonNegativeValue(distance);
+		assertIsNotNaN(distance);
+		assertIsNotInfinite(distance);
+
+		assertClassInvariants();
+		return distance;
 	}
 
 	/**
 	 * See AbstractCoordinate class for documentation
 	 */
 	@Override
-	public Coordinate asOwnCoordinate(Coordinate c) {
+	protected Coordinate asOwnCoordinate(Coordinate c) {
 		return asSphericCoordinate(c);
 	}
 
-	/**
-	 * See Coordinate interface for documentation
-	 */
 	@Override
-	public double[] asSphericRepresentation() {
-		return new double[] { latitude, longitude, radius };
-	}
-
-	/**
-	 * See Coordinate interface for documentation
-	 */
-	@Override
-	public double[] asCartesianRepresentation() {
-		// normalized to valid values: [0,180]
-		double normalizedLat = latitude >= ZERO_VALUE ? latitude
-				: HALF_CIRCLE_VALUE + latitude;
-
-		double x = radius * Math.sin(Math.toRadians(normalizedLat))
-				* Math.cos(Math.toRadians(longitude));
-		double y = radius * Math.sin(Math.toRadians(normalizedLat))
-				* Math.sin(Math.toRadians(longitude));
-		double z = radius * Math.cos(Math.toRadians(normalizedLat));
-		return new double[] { x, y, z };
+	protected void assertClassInvariants() {
+		assertIsValidLatitude(latitude);
+		assertIsValidLongitude(longitude);
+		assertIsValidRadius(radius);
 	}
 
 	/**
@@ -139,54 +161,16 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	public static SphericCoordinate asSphericCoordinate(Coordinate c) {
-		double[] sphericRep = c.asSphericRepresentation();
-		return new SphericCoordinate(sphericRep[0], sphericRep[1],
-				sphericRep[2]);
-	}
+		// precondition
+		assertIsArgumentNotNull(c);
 
-	/**
-	 * Assert if Latitude is valid
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param lat
-	 */
-	private static void assertValidLatitude(double lat) {
-		if (lat > MAX_LATITUDE || lat < MIN_LATITUDE) {
-			throw new IllegalArgumentException(
-					"Latitude value is not valid. Range:[-90,90]");
-		}
-	}
+		SphericCoordinate result = new SphericCoordinate(c.getLatitude(),
+				c.getLongitude(), c.getRadius());
 
-	/**
-	 * Assert if Longitude is valid
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param lon
-	 */
-	private static void assertValidLongitude(double lon) {
-		if (lon > MAX_LONGITUDE || lon < MIN_LONGITUDE) {
-			throw new IllegalArgumentException(
-					"Longitude value is not valid. Range:[-180,180]");
-		}
-	}
+		// postcondition
+		result.assertClassInvariants();
 
-	/**
-	 * Assert if Radius is valid
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param lon
-	 */
-	private static void assertValidRadius(double rad) {
-		if (rad < 0) {
-			throw new IllegalArgumentException(
-					"Radius value is not valid. Should be >= 0");
-		}
+		return result;
 	}
 
 	/**
@@ -200,11 +184,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(latitude);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(longitude);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (int) latitude;
+		result = prime * result + (int) longitude;
+		result = prime * result + (int) radius;
 		return result;
 	}
 
@@ -227,12 +209,14 @@ public class SphericCoordinate extends AbstractCoordinate {
 			return false;
 		}
 		SphericCoordinate other = (SphericCoordinate) obj;
-		if (Double.doubleToLongBits(latitude) != Double
-				.doubleToLongBits(other.latitude)) {
+		double delta = 0.001;
+		if (Math.abs(latitude - other.latitude) > delta) {
 			return false;
 		}
-		if (Double.doubleToLongBits(longitude) != Double
-				.doubleToLongBits(other.longitude)) {
+		if (Math.abs(longitude - other.longitude) > delta) {
+			return false;
+		}
+		if (Math.abs(radius - other.radius) > delta) {
 			return false;
 		}
 		return true;
