@@ -13,6 +13,17 @@ import java.util.logging.Logger;
  * 
  * @review
  */
+
+/**
+ * @Pattern (
+ * 		name = "Adapter"
+ * 		participants = {
+ * 			"ImageStorage",
+ * 			"DatastoreAdapter",
+ * 			"GcsAdapter"
+ * 		}
+ *	)
+ */
 public abstract class ImageStorage {
 
 	private static final Logger log = Logger.getLogger(ImageStorage.class.getName());

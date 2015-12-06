@@ -22,6 +22,17 @@ import java.util.logging.Logger;
 /**
  * An agent class to notify users about new praise received for their photos.
  */
+
+/**
+ * @Pattern = (
+ * 		name = "Observer"
+ * 		participants = {
+ * 			"NotifyUsersAboutPraiseAgent",
+ * 			("Photo",
+ * 			"User")
+ *		}
+ * )
+ */
 public class NotifyUsersAboutPraiseAgent extends Agent {
 
 	public static final String NAME = "notifyUsersAboutPraise";
