@@ -1,6 +1,6 @@
 package org.wahlzeit.model;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Cartesian coordinate class
@@ -12,7 +12,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	/**
 	 * Map for all CartesianCoordinates (shared objects)
 	 */
-	private static HashMap<String, CartesianCoordinate> allCartesianCoordinates = new HashMap<>();
+	private static ConcurrentHashMap<String, CartesianCoordinate> allCartesianCoordinates = new ConcurrentHashMap<>();
 	
 	/**
 	 * x coordinate

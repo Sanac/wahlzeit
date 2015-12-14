@@ -1,6 +1,6 @@
 package org.wahlzeit.model;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Spheric coordinate class
@@ -12,7 +12,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	/**
 	 * Map for all SphericCoordinates (shared objects)
 	 */
-	private static HashMap<String, SphericCoordinate> allSphericCoordinates = new HashMap<>();
+	private static ConcurrentHashMap<String, SphericCoordinate> allSphericCoordinates = new ConcurrentHashMap<>();
 	
 	/**
 	 * Latitude in degrees
