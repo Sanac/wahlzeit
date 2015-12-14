@@ -39,14 +39,14 @@ public class CoordinateTest {
 
 	@Before
 	public void initCoordinate() {
-		minCoordinateSpheric = new SphericCoordinate(
+		minCoordinateSpheric = SphericCoordinate.getSphericCoordinate(
 				SphericCoordinate.MIN_LATITUDE,
 				SphericCoordinate.MIN_LONGITUDE,
 				SphericCoordinate.ZERO_VALUE + 1);
-		midCoordinateSpheric = new SphericCoordinate(
+		midCoordinateSpheric = SphericCoordinate.getSphericCoordinate(
 				SphericCoordinate.ZERO_VALUE, SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.HALF_CIRCLE_VALUE);
-		maxCoordinateSpheric = new SphericCoordinate(
+		maxCoordinateSpheric = SphericCoordinate.getSphericCoordinate(
 				SphericCoordinate.MAX_LATITUDE - 1.0,
 				SphericCoordinate.MAX_LONGITUDE - 1.0,
 				SphericCoordinate.CIRCLE_VALUE);
@@ -56,13 +56,13 @@ public class CoordinateTest {
 				.asCartesianCoordinate(midCoordinateSpheric);
 		maxCoordinateCartesian = CartesianCoordinate
 				.asCartesianCoordinate(maxCoordinateSpheric);
-		tokyoSpheric = new SphericCoordinate(35.69, 139.69, AbstractCoordinate.EARTH_RADIUS_KM);
+		tokyoSpheric = SphericCoordinate.getSphericCoordinate(35.69, 139.69, AbstractCoordinate.EARTH_RADIUS_KM);
 		tokyoCartesian = CartesianCoordinate.asCartesianCoordinate(tokyoSpheric);
-		berlinSpheric = new SphericCoordinate(52.52, 13.40, AbstractCoordinate.EARTH_RADIUS_KM);
+		berlinSpheric = SphericCoordinate.getSphericCoordinate(52.52, 13.40, AbstractCoordinate.EARTH_RADIUS_KM);
 		berlinCartesian = CartesianCoordinate.asCartesianCoordinate(berlinSpheric);
-		newYorkSpheric = new SphericCoordinate(40.71, -74.01, AbstractCoordinate.EARTH_RADIUS_KM);
+		newYorkSpheric = SphericCoordinate.getSphericCoordinate(40.71, -74.01, AbstractCoordinate.EARTH_RADIUS_KM);
 		newYorkCartesian = CartesianCoordinate.asCartesianCoordinate(newYorkSpheric);
-		sydneySpheric = new SphericCoordinate(-33.87, 151.21, AbstractCoordinate.EARTH_RADIUS_KM);
+		sydneySpheric = SphericCoordinate.getSphericCoordinate(-33.87, 151.21, AbstractCoordinate.EARTH_RADIUS_KM);
 		sydneyCartesian = CartesianCoordinate.asCartesianCoordinate(sydneySpheric);
 	}
 

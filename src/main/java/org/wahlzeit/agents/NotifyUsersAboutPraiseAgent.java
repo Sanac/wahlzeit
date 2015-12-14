@@ -27,9 +27,7 @@ import java.util.logging.Logger;
  * @Pattern = (
  * 		name = "Observer"
  * 		participants = {
- * 			"NotifyUsersAboutPraiseAgent",
- * 			("Photo",
- * 			"User")
+ * 			"Subject"
  *		}
  * )
  */

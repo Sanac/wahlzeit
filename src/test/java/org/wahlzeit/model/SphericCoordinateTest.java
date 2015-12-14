@@ -22,13 +22,13 @@ public class SphericCoordinateTest {
 
 	@Before
 	public void initCoordinate() {
-		minCoordinate = new SphericCoordinate(SphericCoordinate.MIN_LATITUDE,
+		minCoordinate = SphericCoordinate.getSphericCoordinate(SphericCoordinate.MIN_LATITUDE,
 				SphericCoordinate.MIN_LONGITUDE,
 				SphericCoordinate.ZERO_VALUE + 1);
-		midCoordinate = new SphericCoordinate(SphericCoordinate.ZERO_VALUE,
+		midCoordinate = SphericCoordinate.getSphericCoordinate(SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.HALF_CIRCLE_VALUE);
-		maxCoordinate = new SphericCoordinate(
+		maxCoordinate = SphericCoordinate.getSphericCoordinate(
 				SphericCoordinate.MAX_LATITUDE - 1.0,
 				SphericCoordinate.MAX_LONGITUDE - 1.0,
 				SphericCoordinate.CIRCLE_VALUE);
@@ -43,33 +43,33 @@ public class SphericCoordinateTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void tooSmallLatitudeShouldThrowException() {
-		new SphericCoordinate(SphericCoordinate.MIN_LATITUDE - 1,
+		SphericCoordinate.getSphericCoordinate(SphericCoordinate.MIN_LATITUDE - 1,
 				SphericCoordinate.ZERO_VALUE, SphericCoordinate.ZERO_VALUE);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void tooSmallLongitudeShouldThrowException() {
-		new SphericCoordinate(SphericCoordinate.ZERO_VALUE,
+		SphericCoordinate.getSphericCoordinate(SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.MIN_LONGITUDE - 1,
 				SphericCoordinate.ZERO_VALUE);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void tooLargeLatitudeShouldThrowException() {
-		new SphericCoordinate(SphericCoordinate.MAX_LATITUDE + 1,
+		SphericCoordinate.getSphericCoordinate(SphericCoordinate.MAX_LATITUDE + 1,
 				SphericCoordinate.ZERO_VALUE, SphericCoordinate.ZERO_VALUE);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void tooLargeLongitudeShouldThrowException() {
-		new SphericCoordinate(SphericCoordinate.ZERO_VALUE,
+		SphericCoordinate.getSphericCoordinate(SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.MAX_LONGITUDE + 1,
 				SphericCoordinate.ZERO_VALUE);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void negativeRadiusShouldThrowException() {
-		new SphericCoordinate(SphericCoordinate.ZERO_VALUE,
+		SphericCoordinate.getSphericCoordinate(SphericCoordinate.ZERO_VALUE,
 				SphericCoordinate.ZERO_VALUE, SphericCoordinate.ZERO_VALUE - 1);
 	}
 

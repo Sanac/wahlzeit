@@ -160,13 +160,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	protected static void assertIsValidLatitude(double lat) {
 		if (lat > MAX_LATITUDE || lat < MIN_LATITUDE) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Latitude value is not valid. Range:[-90,90]");
 		} else if (Double.isNaN(lat)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Latitude value is not valid. (NaN)");
 		} else if (Double.isInfinite(lat)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Latitude value is not valid. (infinite)");
 		}
 	}
@@ -181,13 +181,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	protected static void assertIsValidLongitude(double lon) {
 		if (lon > MAX_LONGITUDE || lon < MIN_LONGITUDE) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Longitude value is not valid. Range:[-180,180]");
 		} else if (Double.isNaN(lon)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Longitude value is not valid. (NaN)");
 		} else if (Double.isInfinite(lon)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Longitude value is not valid. (infinite)");
 		}
 	}
@@ -202,12 +202,12 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	protected static void assertIsValidRadius(double rad) {
 		if (rad < 0) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Radius value is not valid. Should be >= 0");
 		} else if (Double.isNaN(rad)) {
-			throw new IllegalStateException("Radius value is not valid. (NaN)");
+			throw new IllegalArgumentException("Radius value is not valid. (NaN)");
 		} else if (Double.isInfinite(rad)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Radius value is not valid. (infinite)");
 		}
 	}

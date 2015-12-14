@@ -40,6 +40,15 @@ import java.util.logging.Logger;
  * Also, his/her contact information and whether the account has been confirmed.
  * Users can have a home page which may be elsewhere on the web.
  */
+
+/**
+ * @Pattern = (
+ * 		name = "Observer"
+ * 		participants = {
+ * 			"ConcreteObserver"
+ *		}
+ * )
+ */
 @Subclass(index = true)
 public class User extends Client {
 

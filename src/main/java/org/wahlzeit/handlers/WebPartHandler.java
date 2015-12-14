@@ -27,15 +27,14 @@ import java.util.Map;
 
 
 /**
- * The general interface for web partgs.
+ * The general interface for web parts.
  */
 
 /**
  * @Pattern = (
  * 		name = "Strategy"
  * 		participants = {
- * 			"WebPartHandler",
- * 			all implementing handler classes in org.wahlzeit.handlers
+ * 			"Strategy"
  * 		}
  * )
  */

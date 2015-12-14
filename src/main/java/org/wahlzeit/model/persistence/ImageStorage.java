@@ -18,9 +18,7 @@ import java.util.logging.Logger;
  * @Pattern (
  * 		name = "Adapter"
  * 		participants = {
- * 			"ImageStorage",
- * 			"DatastoreAdapter",
- * 			"GcsAdapter"
+ * 			"Target"
  * 		}
  *	)
  */

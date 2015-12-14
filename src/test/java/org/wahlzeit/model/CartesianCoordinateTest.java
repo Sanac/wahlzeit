@@ -22,9 +22,9 @@ public class CartesianCoordinateTest {
 
 	@Before
 	public void initCoordinate() {
-		smallCoordinate = new CartesianCoordinate(-2, -8, -5);
-		midCoordinate = new CartesianCoordinate(-1, 1, -1);
-		largeCoordinate = new CartesianCoordinate(2, 8, 5);
+		smallCoordinate = CartesianCoordinate.getCartesianCoordinate(-2, -8, -5);
+		midCoordinate = CartesianCoordinate.getCartesianCoordinate(-1, 1, -1);
+		largeCoordinate = CartesianCoordinate.getCartesianCoordinate(2, 8, 5);
 	}
 
 	@Test
@@ -62,29 +62,23 @@ public class CartesianCoordinateTest {
 
 	@Test
 	public void testAsCartesianCoordinate() {
-		Coordinate c1 = CartesianCoordinate
-				.asCartesianCoordinate(smallCoordinate);
-		Coordinate c2 = CartesianCoordinate
-				.asCartesianCoordinate(midCoordinate);
-		Coordinate c3 = CartesianCoordinate
-				.asCartesianCoordinate(largeCoordinate);
-		System.out.println("(" + smallCoordinate.getLatitude() + ", "
-				+ smallCoordinate.getLongitude() + ", "
-				+ smallCoordinate.getRadius() + ")" + " (" + c1.getLatitude()
-				+ ", " + c1.getLongitude() + ", " + c1.getRadius() + ")");
-		System.out.println("(" + midCoordinate.getLatitude() + ", "
-				+ midCoordinate.getLongitude() + ", "
-				+ midCoordinate.getRadius() + ")" + " (" + c2.getLatitude()
-				+ ", " + c2.getLongitude() + ", " + c2.getRadius() + ")");
-		System.out.println("(" + largeCoordinate.getLatitude() + ", "
-				+ largeCoordinate.getLongitude() + ", "
-				+ largeCoordinate.getRadius() + ")" + " (" + c3.getLatitude()
-				+ ", " + c3.getLongitude() + ", " + c3.getRadius() + ")");
-		assertEquals(smallCoordinate,
-				CartesianCoordinate.asCartesianCoordinate(smallCoordinate));
-		assertEquals(midCoordinate,
-				CartesianCoordinate.asCartesianCoordinate(midCoordinate));
-		assertEquals(largeCoordinate,
-				CartesianCoordinate.asCartesianCoordinate(largeCoordinate));
+		assertEquals(smallCoordinate.getX(),
+				CartesianCoordinate.asCartesianCoordinate(smallCoordinate).getX(), EPSILON);
+		assertEquals(smallCoordinate.getY(),
+				CartesianCoordinate.asCartesianCoordinate(smallCoordinate).getY(), EPSILON);
+		assertEquals(smallCoordinate.getZ(),
+				CartesianCoordinate.asCartesianCoordinate(smallCoordinate).getZ(), EPSILON);
+		assertEquals(midCoordinate.getX(),
+				CartesianCoordinate.asCartesianCoordinate(midCoordinate).getX(), EPSILON);
+		assertEquals(midCoordinate.getY(),
+				CartesianCoordinate.asCartesianCoordinate(midCoordinate).getY(), EPSILON);
+		assertEquals(midCoordinate.getZ(),
+				CartesianCoordinate.asCartesianCoordinate(midCoordinate).getZ(), EPSILON);
+		assertEquals(largeCoordinate.getX(),
+				CartesianCoordinate.asCartesianCoordinate(largeCoordinate).getX(), EPSILON);
+		assertEquals(largeCoordinate.getY(),
+				CartesianCoordinate.asCartesianCoordinate(largeCoordinate).getY(), EPSILON);
+		assertEquals(largeCoordinate.getZ(),
+				CartesianCoordinate.asCartesianCoordinate(largeCoordinate).getZ(), EPSILON);
 	}
 }

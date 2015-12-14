@@ -47,6 +47,15 @@ import java.util.logging.Logger;
  * 
  * @review
  */
+
+/**
+ * @Pattern (
+ * 		name = "Adapter"
+ * 		participants = {
+ * 			"Adapter"
+ * 		}
+ *	)
+ */
 public class GcsAdapter extends ImageStorage {
 
 	private static final Logger log = Logger.getLogger(GcsAdapter.class.getName());
