@@ -2,6 +2,8 @@ package org.wahlzeit.model;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.wahlzeit.utils.Assertions;
+
 /**
  * Cartesian coordinate class
  * 
@@ -70,7 +72,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 */
 	public static CartesianCoordinate asCartesianCoordinate(Coordinate c) {
 		// precondition
-		assertIsArgumentNotNull(c);
+		Assertions.assertIsArgumentNotNull(c);
 
 		double latitude = c.getLatitude();
 		double longitude = c.getLongitude();
@@ -102,12 +104,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @param z
 	 */
 	private CartesianCoordinate(double x, double y, double z) {
-		assertIsNotNaN(x);
-		assertIsNotNaN(y);
-		assertIsNotNaN(z);
-		assertIsNotInfinite(x);
-		assertIsNotInfinite(y);
-		assertIsNotInfinite(z);
+		Assertions.assertIsNotNaN(x);
+		Assertions.assertIsNotNaN(y);
+		Assertions.assertIsNotNaN(z);
+		Assertions.assertIsNotInfinite(x);
+		Assertions.assertIsNotInfinite(y);
+		Assertions.assertIsNotInfinite(z);
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -221,12 +223,12 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 */
 	@Override
 	protected void assertClassInvariants() {
-		assertIsNotNaN(x);
-		assertIsNotNaN(y);
-		assertIsNotNaN(z);
-		assertIsNotInfinite(x);
-		assertIsNotInfinite(y);
-		assertIsNotInfinite(z);
+		Assertions.assertIsNotNaN(x);
+		Assertions.assertIsNotNaN(y);
+		Assertions.assertIsNotNaN(z);
+		Assertions.assertIsNotInfinite(x);
+		Assertions.assertIsNotInfinite(y);
+		Assertions.assertIsNotInfinite(z);
 	}
 
 	/**

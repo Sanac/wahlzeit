@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import org.wahlzeit.utils.Assertions;
+
 public abstract class AbstractCoordinate implements Coordinate {
 	/**
 	 * Constants needed for calculations
@@ -28,7 +30,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 
 		// Precondition
-		assertIsArgumentNotNull(other);
+		Assertions.assertIsArgumentNotNull(other);
 
 		double thisLatitude = getLatitude();
 		double thisLongitude = getLongitude();
@@ -48,9 +50,9 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 
 		// Postcondition
-		assertIsNonNegativeValue(result);
-		assertIsNotNaN(result);
-		assertIsNotInfinite(result);
+		Assertions.assertIsNonNegativeValue(result);
+		Assertions.assertIsNotNaN(result);
+		Assertions.assertIsNotInfinite(result);
 
 		return result;
 	}
@@ -66,7 +68,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 
 		// Precondition
-		assertIsArgumentNotNull(c);
+		Assertions.assertIsArgumentNotNull(c);
 
 		boolean result = equals(asOwnCoordinate(c));
 
@@ -93,62 +95,6 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 * @methodtype assertion
 	 */
 	protected abstract void assertClassInvariants();
-
-	/**
-	 * Assert if argument is null
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param c
-	 */
-	protected static void assertIsArgumentNotNull(Object c) {
-		if (c == null) {
-			throw new IllegalArgumentException("Given Argument is null!");
-		}
-	}
-
-	/**
-	 * Assert if argument is non negative
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param value
-	 */
-	protected static void assertIsNonNegativeValue(double value) {
-		if (value < 0) {
-			throw new IllegalStateException("Value is negative!");
-		}
-	}
-
-	/**
-	 * Assert if argument is not NaN
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param value
-	 */
-	protected static void assertIsNotNaN(double value) {
-		if (Double.isNaN(value)) {
-			throw new IllegalStateException("Value is NaN!");
-		}
-	}
-
-	/**
-	 * Assert if argument is not infinite
-	 * 
-	 * @methodtype assertion
-	 * @methodproperties primitive class
-	 * 
-	 * @param value
-	 */
-	protected static void assertIsNotInfinite(double value) {
-		if (Double.isInfinite(value)) {
-			throw new IllegalStateException("Value is infinite!");
-		}
-	}
 
 	/**
 	 * Assert if latitude is valid
@@ -205,7 +151,8 @@ public abstract class AbstractCoordinate implements Coordinate {
 			throw new IllegalArgumentException(
 					"Radius value is not valid. Should be >= 0");
 		} else if (Double.isNaN(rad)) {
-			throw new IllegalArgumentException("Radius value is not valid. (NaN)");
+			throw new IllegalArgumentException(
+					"Radius value is not valid. (NaN)");
 		} else if (Double.isInfinite(rad)) {
 			throw new IllegalArgumentException(
 					"Radius value is not valid. (infinite)");

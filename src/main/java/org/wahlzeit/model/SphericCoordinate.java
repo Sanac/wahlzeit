@@ -2,6 +2,8 @@ package org.wahlzeit.model;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.wahlzeit.utils.Assertions;
+
 /**
  * Spheric coordinate class
  * 
@@ -72,7 +74,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 */
 	public static SphericCoordinate asSphericCoordinate(Coordinate c) {
 		// precondition
-		assertIsArgumentNotNull(c);
+		Assertions.assertIsArgumentNotNull(c);
 
 		SphericCoordinate result = SphericCoordinate.getSphericCoordinate(c.getLatitude(),
 				c.getLongitude(), c.getRadius());
@@ -145,7 +147,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 		assertClassInvariants();
 
 		// precondition
-		assertIsArgumentNotNull(c);
+		Assertions.assertIsArgumentNotNull(c);
 
 		// if distance is larger then 180 return the shorter distance
 		double distance = Math.abs(this.longitude - c.longitude);
@@ -154,9 +156,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 		}
 
 		// postcondition
-		assertIsNonNegativeValue(distance);
-		assertIsNotNaN(distance);
-		assertIsNotInfinite(distance);
+		Assertions.assertIsNonNegativeValue(distance);
+		Assertions.assertIsNotNaN(distance);
+		Assertions.assertIsNotInfinite(distance);
 
 		assertClassInvariants();
 		return distance;
@@ -176,14 +178,14 @@ public class SphericCoordinate extends AbstractCoordinate {
 		assertClassInvariants();
 
 		// precondition
-		assertIsArgumentNotNull(c);
+		Assertions.assertIsArgumentNotNull(c);
 
 		double distance = Math.abs(this.latitude - c.latitude);
 
 		// postcondition
-		assertIsNonNegativeValue(distance);
-		assertIsNotNaN(distance);
-		assertIsNotInfinite(distance);
+		Assertions.assertIsNonNegativeValue(distance);
+		Assertions.assertIsNotNaN(distance);
+		Assertions.assertIsNotInfinite(distance);
 
 		assertClassInvariants();
 		return distance;

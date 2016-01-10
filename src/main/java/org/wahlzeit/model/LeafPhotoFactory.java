@@ -27,12 +27,12 @@ public class LeafPhotoFactory extends PhotoFactory{
 	}
 	
 	/**
-	 * Creates LeafPhoto given color, length and tree name 
+	 * Creates LeafPhoto given leaf
 	 * 
 	 * @methodtype factory
 	 * @methodproperties primitive instance convenience
 	 */
-	public Photo createPhoto(LeafColor color, double size, String plant) {
-		return new LeafPhoto(color, size, plant);
+	public Photo createPhoto(Leaf leaf) {
+		return new LeafPhoto(leaf);
 	}
 }

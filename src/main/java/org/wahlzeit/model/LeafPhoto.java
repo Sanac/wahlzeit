@@ -1,42 +1,41 @@
 package org.wahlzeit.model;
 
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Subclass;
-
 
 /**
  * Class for Photos of the domain Leafs
  */
-@Subclass(index=true)
-public class LeafPhoto extends Photo{
-	
+@Subclass(index = true)
+public class LeafPhoto extends Photo {
+
 	/**
-	 * Leaf color (see Enum Leafcolor)
+	 * Leaf attribute
 	 */
-	private LeafColor color;
-	
+	private Leaf leaf;
+
 	/**
-	 * Length/size of leaf
+	 * Default constructor
 	 */
-	private double size;
-	
-	/**
-	 * Name of the plant/tree of the leaf
-	 */
-	private String plant;
-	
 	public LeafPhoto() {
 		super();
 	}
-	
+
 	public LeafPhoto(PhotoId myId) {
 		super(myId);
 	}
-	
-	public LeafPhoto(LeafColor color, double size, String plant) {
+
+	public LeafPhoto(Leaf leaf) {
 		super();
-		this.color = color;
-		this.size = size;
-		this.plant = plant;
+		this.leaf = leaf;
+	}
+
+	/**
+	 * Getter for leaf
+	 * 
+	 * @methodtype get
+	 * @return
+	 */
+	public Leaf getLeaf() {
+		return leaf;
 	}
 }
