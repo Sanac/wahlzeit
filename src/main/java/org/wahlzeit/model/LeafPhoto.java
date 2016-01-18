@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import org.wahlzeit.utils.Assertions;
+
 import com.googlecode.objectify.annotation.Subclass;
 
 /**
@@ -37,5 +39,17 @@ public class LeafPhoto extends Photo {
 	 */
 	public Leaf getLeaf() {
 		return leaf;
+	}
+	
+	/**
+	 * Setter for leaf
+	 * 
+	 * @methodtype set
+	 * 
+	 * @param leaf
+	 */
+	public void setLeaf(Leaf leaf) {
+		Assertions.assertIsArgumentNotNull(leaf);
+		this.leaf = leaf;
 	}
 }

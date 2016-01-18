@@ -23,7 +23,7 @@ public class LeafPhotoFactory extends PhotoFactory{
 	 */
 	@Override
 	public Photo createPhoto(PhotoId id) {
-		return new LeafPhoto();
+		return new LeafPhoto(id);
 	}
 	
 	/**
