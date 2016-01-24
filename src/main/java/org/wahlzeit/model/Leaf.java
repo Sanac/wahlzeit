@@ -2,9 +2,10 @@ package org.wahlzeit.model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.wahlzeit.services.DataObject;
 import org.wahlzeit.utils.Assertions;
 
-public class Leaf {
+public class Leaf extends DataObject{
 
 	/**
 	 * Leaf type 
@@ -56,6 +57,24 @@ public class Leaf {
 		setColor(color);
 		setSize(size);
 		setLocation(location);
+	}
+
+	/**
+	 * @methodtype get
+	 * 
+	 * @return
+	 */
+	public LeafType getLeafType() {
+		return leafType;
+	}
+
+	/**
+	 * @methodtype set
+	 * 
+	 * @param leafType
+	 */
+	public void setLeafType(LeafType leafType) {
+		this.leafType = leafType;
 	}
 
 	/**
